@@ -13,6 +13,7 @@ export default function Page() {
         <div className="font-mono text-xs text-muted-foreground">
           (Press <kbd>d</kbd> to toggle dark mode)
         </div>
+        <script src="http://localhost:3000/form" async></script>
       </div>
     </div>
   )
