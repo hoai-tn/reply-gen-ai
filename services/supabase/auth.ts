@@ -1,13 +1,6 @@
 import type { Session, User } from "@supabase/supabase-js"
 import { supabase } from "@/lib/supabase"
 
-export type PilotInfo = {
-  id: string
-  status: "requested" | "paid" | "activated" | "live" | "ended" | "archived"
-  plan_type: string | null
-  activated_at: string | null
-}
-
 export type BusinessInfo = {
   id: string
   name: string
@@ -37,9 +30,7 @@ const getMe = async (): Promise<MeData | null> => {
 
   const { data: business } = await supabase
     .from("businesses")
-    .select(
-      "id, name, slug, status, industry_type, website, pilots(id, status, plan_type, activated_at)"
-    )
+    .select("id, name, slug, status, industry_type, website")
     .eq("owner_id", user.id)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
