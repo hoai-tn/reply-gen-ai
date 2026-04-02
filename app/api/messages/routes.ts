@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
-import { supabaseServer } from "@/lib/supabase-server"
 
 export async function POST(request: NextRequest) {
   try {
-    const {
-      formId,
-      question,
-    }: { formId: string; question: string } = await request.json()
+    const { formId, question }: { formId: string; question: string } =
+      await request.json()
 
     if (!formId || !question) {
       return NextResponse.json(

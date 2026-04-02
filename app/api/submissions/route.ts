@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { listSubmissions, createSubmission } from "@/services/submissions"
-import type { CreateSubmissionPayload } from "@/services/submissions"
+import { listSubmissions, createSubmission } from "@/services/supabase"
+import type { CreateSubmissionPayload } from "@/services/supabase"
 
 export async function GET(request: NextRequest) {
   const formId = new URL(request.url).searchParams.get("formId")
@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
     const data = await listSubmissions(formId)
     return NextResponse.json({ data })
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
   }
 }
 
@@ -31,6 +34,9 @@ export async function POST(request: NextRequest) {
     const data = await createSubmission(body)
     return NextResponse.json({ data }, { status: 201 })
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
   }
 }

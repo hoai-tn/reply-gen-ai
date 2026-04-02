@@ -1,5 +1,0 @@
-export { GET } from "./handlers/get"
-export { POST } from "./handlers/post"
-export { PUT } from "./handlers/put"
-export { PATCH } from "./handlers/patch"
-export { DELETE } from "./handlers/delete"

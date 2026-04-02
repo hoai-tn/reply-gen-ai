@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   DashboardSpeed01Icon,
-  LegalDocument01Icon,
+  MessageMultiple02Icon,
   FolderLibraryIcon,
   Settings01Icon,
 } from "@hugeicons/core-free-icons"
@@ -23,9 +23,9 @@ const navItems = [
     icon: DashboardSpeed01Icon,
   },
   {
-    label: "Forms",
-    href: "/business/forms",
-    icon: LegalDocument01Icon,
+    label: "Submissions",
+    href: "/business/submissions",
+    icon: MessageMultiple02Icon,
   },
   {
     label: "Documents",
