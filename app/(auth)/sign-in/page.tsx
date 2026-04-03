@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Mail01Icon, LockPasswordIcon, EyeIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons"
 
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 
 export default function SignInPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -25,7 +26,7 @@ export default function SignInPage() {
 
     try {
       await signInWithEmail(email, password)
-      router.push("/")
+      router.push(searchParams.get("next") ?? "/business/dashboard")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Invalid email or password")
     } finally {

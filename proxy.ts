@@ -5,20 +5,33 @@ export async function proxy(request: NextRequest) {
   const response = NextResponse.next()
   const supabase = createMiddlewareClient(request, response)
 
+  const { pathname } = request.nextUrl
+
+  // Validate the JWT server-side — never trust the client cookie alone
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  console.log("User in proxy:", user)
+  const isProtected = pathname.startsWith("/business")
+  const isAuthPage = pathname === "/sign-in" || pathname === "/sign-up"
 
-  const isAuthPage = request.nextUrl.pathname.startsWith("/auth")
+  if (!user && isProtected) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/sign-in"
+    url.searchParams.set("next", pathname)
+    return NextResponse.redirect(url)
+  }
 
-  // Authenticated users should not access auth pages — redirect to dashboard
   if (user && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    const url = request.nextUrl.clone()
+    url.pathname = "/business/dashboard"
+    url.searchParams.delete("next")
+    return NextResponse.redirect(url)
   }
 
   return response
 }
 
 export const config = {
-  matcher: ["/auth/:path*"],
+  matcher: ["/sign-in", "/sign-up", "/business/:path*"],
 }

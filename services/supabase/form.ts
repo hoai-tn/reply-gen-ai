@@ -28,3 +28,17 @@ export async function getForm(id: string) {
   if (error) throw error
   return data as Form
 }
+
+export async function createForm(
+  businessId: string,
+  name: string,
+  schema: Form["schema"],
+) {
+  const { data, error } = await supabase
+    .from("forms")
+    .insert({ business_id: businessId, name, schema })
+    .select("*")
+    .single()
+  if (error) throw error
+  return data as Form
+}
