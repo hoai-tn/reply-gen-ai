@@ -9,6 +9,7 @@ import {
   ArrowRight01Icon,
   PlusSignIcon,
   Delete02Icon,
+  LinkSquare02Icon,
 } from "@hugeicons/core-free-icons"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -38,6 +39,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { getMe } from "@/services/supabase"
 import { listForms, createForm, type Form } from "@/services/supabase/form"
+import { LinkDocumentsDialog } from "./_components/link-documents-dialog"
 
 const FIELD_TYPES = [
   { value: "text", label: "Text" },
@@ -72,6 +74,7 @@ export default function SubmissionsPage() {
   const [error, setError] = React.useState<string | null>(null)
   const [businessId, setBusinessId] = React.useState<string | null>(null)
   const [open, setOpen] = React.useState(false)
+  const [linkTarget, setLinkTarget] = React.useState<Form | null>(null)
 
   React.useEffect(() => {
     async function load() {
@@ -95,6 +98,14 @@ export default function SubmissionsPage() {
   function handleCreated(form: Form) {
     setForms((prev) => [form, ...prev])
     setOpen(false)
+  }
+
+  function handleDocumentsSaved(formId: string, count: number) {
+    setForms((prev) =>
+      prev.map((f) =>
+        f.id === formId ? { ...f, form_documents: [{ count }] } : f,
+      ),
+    )
   }
 
   return (
@@ -132,7 +143,11 @@ export default function SubmissionsPage() {
             </p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {forms.map((form) => (
-                <FormCard key={form.id} form={form} />
+                <FormCard
+                  key={form.id}
+                  form={form}
+                  onLinkDocuments={() => setLinkTarget(form)}
+                />
               ))}
             </div>
           </>
@@ -145,6 +160,16 @@ export default function SubmissionsPage() {
           onOpenChange={setOpen}
           businessId={businessId}
           onCreated={handleCreated}
+        />
+      )}
+
+      {businessId && linkTarget && (
+        <LinkDocumentsDialog
+          open={!!linkTarget}
+          onOpenChange={(v) => { if (!v) setLinkTarget(null) }}
+          formId={linkTarget.id}
+          businessId={businessId}
+          onSaved={(count) => handleDocumentsSaved(linkTarget.id, count)}
         />
       )}
     </div>
@@ -357,54 +382,86 @@ function CreateFormDialog({
 
 /* ─── Form card ─── */
 
-function FormCard({ form }: { form: Form }) {
+function FormCard({
+  form,
+  onLinkDocuments,
+}: {
+  form: Form
+  onLinkDocuments: () => void
+}) {
   const submissionCount = form.submissions?.[0]?.count ?? 0
+  const documentCount = form.form_documents?.[0]?.count ?? 0
   const fieldCount = form.schema?.length ?? 0
 
   return (
-    <Link href={`/business/submissions/${form.id}`} className="group block">
-      <Card className="h-full transition-all group-hover:ring-foreground/20">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
+    <div className="group relative">
+      <Link href={`/business/submissions/${form.id}`} className="block">
+        <Card className="h-full transition-all group-hover:ring-foreground/20">
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
+                <HugeiconsIcon
+                  icon={LegalDocument01Icon}
+                  size={16}
+                  strokeWidth={1.5}
+                  className="text-muted-foreground"
+                />
+              </div>
               <HugeiconsIcon
-                icon={LegalDocument01Icon}
-                size={16}
+                icon={ArrowRight01Icon}
+                size={14}
                 strokeWidth={1.5}
-                className="text-muted-foreground"
+                className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
               />
             </div>
-            <HugeiconsIcon
-              icon={ArrowRight01Icon}
-              size={14}
-              strokeWidth={1.5}
-              className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
-            />
-          </div>
-          <CardTitle className="mt-1">{form.name}</CardTitle>
-          <CardDescription>
-            {fieldCount} {fieldCount === 1 ? "field" : "fields"}
-          </CardDescription>
-        </CardHeader>
+            <CardTitle className="mt-1">{form.name}</CardTitle>
+            <CardDescription>
+              {fieldCount} {fieldCount === 1 ? "field" : "fields"}
+            </CardDescription>
+          </CardHeader>
 
-        <CardFooter className="border-t pt-3">
-          <div className="flex w-full items-center justify-between">
-            <Badge variant="secondary">
-              <HugeiconsIcon
-                icon={MessageMultiple02Icon}
-                size={10}
-                strokeWidth={1.5}
-              />
-              {submissionCount}{" "}
-              {submissionCount === 1 ? "submission" : "submissions"}
-            </Badge>
-            <span className="text-[11px] text-muted-foreground">
-              {formatDate(form.created_at)}
-            </span>
-          </div>
-        </CardFooter>
-      </Card>
-    </Link>
+          <CardFooter className="border-t pt-3">
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">
+                  <HugeiconsIcon
+                    icon={MessageMultiple02Icon}
+                    size={10}
+                    strokeWidth={1.5}
+                  />
+                  {submissionCount}{" "}
+                  {submissionCount === 1 ? "submission" : "submissions"}
+                </Badge>
+                <Badge variant="secondary">
+                  <HugeiconsIcon
+                    icon={LegalDocument01Icon}
+                    size={10}
+                    strokeWidth={1.5}
+                  />
+                  {documentCount}{" "}
+                  {documentCount === 1 ? "document" : "documents"}
+                </Badge>
+              </div>
+              <span className="text-[11px] text-muted-foreground">
+                {formatDate(form.created_at)}
+              </span>
+            </div>
+          </CardFooter>
+        </Card>
+      </Link>
+
+      {/* Link documents button — sits above the Link to avoid navigation */}
+      <button
+        onClick={(e) => {
+          e.preventDefault()
+          onLinkDocuments()
+        }}
+        title="Link documents"
+        className="absolute right-2 top-2 rounded p-1 text-muted-foreground opacity-0 transition-all hover:text-foreground group-hover:opacity-100"
+      >
+        <HugeiconsIcon icon={LinkSquare02Icon} size={14} strokeWidth={1.5} />
+      </button>
+    </div>
   )
 }
 

@@ -30,7 +30,9 @@ export function DocumentList({
         <DocumentRow
           key={doc.id}
           doc={doc}
-          form={forms.find((f) => f.id === doc.form_id)}
+          forms={forms.filter((f) =>
+            doc.form_documents.some((fd) => fd.form_id === f.id),
+          )}
           onDelete={onDelete}
         />
       ))}

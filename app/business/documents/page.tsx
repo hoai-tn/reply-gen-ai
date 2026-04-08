@@ -37,7 +37,7 @@ export default function DocumentsPage() {
         const bId = me.business.id
         setBusinessId(bId)
         const [docs, formList] = await Promise.all([
-          listDocuments({ businessId: bId }),
+          listDocuments(bId),
           listForms(bId),
         ])
         setDocuments(docs)

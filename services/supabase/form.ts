@@ -7,12 +7,13 @@ export interface Form {
   schema: Array<{ name: string; label: string; type: string; required?: boolean }>
   created_at: string
   submissions?: [{ count: number }]
+  form_documents?: [{ count: number }]
 }
 
 export async function listForms(businessId: string) {
   const { data, error } = await supabase
     .from("forms")
-    .select("*, submissions(count)")
+    .select("*, submissions(count), form_documents(count)")
     .eq("business_id", businessId)
     .order("created_at", { ascending: false })
   if (error) throw error

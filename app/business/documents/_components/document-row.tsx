@@ -8,14 +8,15 @@ import { DocumentFileIcon } from "./document-file-icon"
 
 export function DocumentRow({
   doc,
-  form,
+  forms,
   onDelete,
 }: {
   doc: Document
-  form: Form | undefined
+  forms: Form[]
   onDelete: (doc: Document) => void
 }) {
   const ext = fileExt(doc.name)
+  const linkedFormNames = forms.map((f) => f.name)
 
   return (
     <div className="group/row flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/40">
@@ -33,7 +34,7 @@ export function DocumentRow({
               {formatBytes(doc.file_size)}
             </span>
           )}
-          {form && (
+          {linkedFormNames.length > 0 && (
             <>
               {doc.file_size > 0 && (
                 <span className="text-[11px] text-muted-foreground">·</span>
@@ -45,7 +46,7 @@ export function DocumentRow({
                   strokeWidth={1.5}
                   className="shrink-0"
                 />
-                {form.name}
+                {linkedFormNames.join(", ")}
               </span>
             </>
           )}
