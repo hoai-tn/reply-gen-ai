@@ -35,9 +35,7 @@ const formSchema = z.object({
     .string()
     .min(2, "Name must be at least 2 characters.")
     .max(50, "Name must be at most 50 characters."),
-  email: z
-    .string()
-    .email("Please enter a valid email address."),
+  email: z.string().email("Please enter a valid email address."),
   message: z
     .string()
     .min(10, "Message must be at least 10 characters.")
@@ -72,11 +70,11 @@ export default function FormPage() {
   }
 
   return (
-    <Card className="w-full h-full">
+    <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>Contact Form</CardTitle>
         <CardDescription>
-          Send us a message and we'll get back to you soon.
+          Send us a message and we&apos;ll get back to you soon.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -87,9 +85,7 @@ export default function FormPage() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-name">
-                    Name
-                  </FieldLabel>
+                  <FieldLabel htmlFor="form-rhf-demo-name">Name</FieldLabel>
                   <Input
                     {...field}
                     id="form-rhf-demo-name"
@@ -108,9 +104,7 @@ export default function FormPage() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-email">
-                    Email
-                  </FieldLabel>
+                  <FieldLabel htmlFor="form-rhf-demo-email">Email</FieldLabel>
                   <Input
                     {...field}
                     id="form-rhf-demo-email"

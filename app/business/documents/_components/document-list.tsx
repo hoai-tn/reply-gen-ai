@@ -31,7 +31,7 @@ export function DocumentList({
           key={doc.id}
           doc={doc}
           forms={forms.filter((f) =>
-            doc.form_documents.some((fd) => fd.form_id === f.id),
+            doc.form_documents?.some((fd) => fd.form_id === f.id)
           )}
           onDelete={onDelete}
         />

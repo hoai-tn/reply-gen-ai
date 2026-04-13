@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { uploadDocument, type Document } from "@/services/supabase/document"
+import type { Document } from "@/services/supabase/document"
 import type { Form } from "@/services/supabase/form"
 import { UploadDropzone } from "./upload-dropzone"
 
@@ -93,17 +93,29 @@ export function UploadDialog({
     setProgress("uploading")
 
     try {
+      const fd = new FormData()
+      fd.append("file", uploadFile)
+      fd.append("businessId", businessId)
+      if (formId) fd.append("formId", formId)
+
       setProgress("saving")
-      const doc = await uploadDocument({
-        businessId,
-        formId: formId || null,
-        file: uploadFile,
+      const res = await fetch("/api/documents/upload", {
+        method: "POST",
+        body: fd,
       })
+      const json = await res.json()
+
+      if (!res.ok) throw new Error(json.error ?? "Upload failed")
+
       reset()
-      onUploaded(doc)
+      onUploaded(json.data as Document)
     } catch (error) {
       console.error("Upload failed", error)
-      setErr("Upload failed. Please try again.")
+      setErr(
+        error instanceof Error
+          ? error.message
+          : "Upload failed. Please try again."
+      )
       setUploading(false)
       setProgress("idle")
     }
@@ -153,10 +165,13 @@ export function UploadDialog({
                   value={pasteName}
                   onChange={(e) => setPasteName(e.target.value)}
                   placeholder="e.g. company-faq"
-                  className="h-8 w-full rounded-md border border-border bg-background px-3 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none transition-all focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+                  className="h-8 w-full rounded-md border border-border bg-background px-3 text-xs text-foreground transition-all outline-none placeholder:text-muted-foreground/60 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
                 />
                 <p className="text-[11px] text-muted-foreground">
-                  Saved as <span className="font-mono">{(pasteName.trim() || "pasted-text")}.txt</span>
+                  Saved as{" "}
+                  <span className="font-mono">
+                    {pasteName.trim() || "pasted-text"}.txt
+                  </span>
                 </p>
               </div>
               <div className="space-y-1.5">

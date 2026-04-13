@@ -72,6 +72,9 @@ Required in `.env`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=
+OPENAI_API_KEY=
 STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY` is defined in `configs/server.config.ts` but not yet required — add it when admin-level DB access is needed.

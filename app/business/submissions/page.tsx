@@ -103,8 +103,8 @@ export default function SubmissionsPage() {
   function handleDocumentsSaved(formId: string, count: number) {
     setForms((prev) =>
       prev.map((f) =>
-        f.id === formId ? { ...f, form_documents: [{ count }] } : f,
-      ),
+        f.id === formId ? { ...f, form_documents: [{ count }] } : f
+      )
     )
   }
 
@@ -138,7 +138,7 @@ export default function SubmissionsPage() {
           <EmptyState onNew={() => setOpen(true)} />
         ) : (
           <>
-            <p className="mb-4 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            <p className="mb-4 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
               {forms.length} {forms.length === 1 ? "form" : "forms"}
             </p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -166,7 +166,9 @@ export default function SubmissionsPage() {
       {businessId && linkTarget && (
         <LinkDocumentsDialog
           open={!!linkTarget}
-          onOpenChange={(v) => { if (!v) setLinkTarget(null) }}
+          onOpenChange={(v) => {
+            if (!v) setLinkTarget(null)
+          }}
           formId={linkTarget.id}
           businessId={businessId}
           onSaved={(count) => handleDocumentsSaved(linkTarget.id, count)}
@@ -228,7 +230,7 @@ function CreateFormDialog({
           updated.name = toName(patch.label)
         }
         return updated
-      }),
+      })
     )
   }
 
@@ -457,7 +459,7 @@ function FormCard({
           onLinkDocuments()
         }}
         title="Link documents"
-        className="absolute right-2 top-2 rounded p-1 text-muted-foreground opacity-0 transition-all hover:text-foreground group-hover:opacity-100"
+        className="absolute top-2 right-2 rounded p-1 text-muted-foreground opacity-0 transition-all group-hover:opacity-100 hover:text-foreground"
       >
         <HugeiconsIcon icon={LinkSquare02Icon} size={14} strokeWidth={1.5} />
       </button>

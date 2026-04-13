@@ -26,83 +26,83 @@ export default function BusinessLayout({
 }) {
   return (
     <TooltipProvider>
-    <SidebarProvider>
-      <Sidebar collapsible="icon">
-        {/* Logo */}
-        <SidebarHeader>
-          <Link
-            href="/business/dashboard"
-            className="flex items-center gap-2 px-2 py-1"
-          >
-            <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary">
-              <span className="text-[10px] font-bold text-primary-foreground">
-                AI
+      <SidebarProvider>
+        <Sidebar collapsible="icon">
+          {/* Logo */}
+          <SidebarHeader>
+            <Link
+              href="/business/dashboard"
+              className="flex items-center gap-2 px-2 py-1"
+            >
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary">
+                <span className="text-[10px] font-bold text-primary-foreground">
+                  AI
+                </span>
+              </div>
+              <span className="truncate text-sm font-semibold tracking-tight text-foreground group-data-[collapsible=icon]:hidden">
+                ReplyGen
               </span>
-            </div>
-            <span className="truncate text-sm font-semibold tracking-tight text-foreground group-data-[collapsible=icon]:hidden">
-              ReplyGen
-            </span>
-          </Link>
-        </SidebarHeader>
+            </Link>
+          </SidebarHeader>
 
-        <SidebarSeparator />
-
-        {/* Nav */}
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarNav />
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-
-        {/* Business info */}
-        <SidebarFooter>
           <SidebarSeparator />
-          <div className="flex items-center gap-2 px-2 py-1 group-data-[collapsible=icon]:justify-center">
-            <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold text-muted-foreground">
-              B
+
+          {/* Nav */}
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarNav />
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          {/* Business info */}
+          <SidebarFooter>
+            <SidebarSeparator />
+            <div className="flex items-center gap-2 px-2 py-1 group-data-[collapsible=icon]:justify-center">
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold text-muted-foreground">
+                B
+              </div>
+              <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+                <p className="truncate text-xs font-medium text-foreground">
+                  Business name
+                </p>
+                <p className="truncate text-[10px] text-muted-foreground">
+                  Active
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-              <p className="truncate text-xs font-medium text-foreground">
-                Business name
-              </p>
-              <p className="truncate text-[10px] text-muted-foreground">
-                Active
-              </p>
+          </SidebarFooter>
+
+          <SidebarRail />
+        </Sidebar>
+
+        {/* Main area */}
+        <SidebarInset>
+          {/* Navbar */}
+          <header className="flex h-12 shrink-0 items-center justify-between border-b border-border px-4">
+            <SidebarTrigger />
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon">
+                <HugeiconsIcon
+                  icon={Logout01Icon}
+                  className="text-muted-foreground"
+                  strokeWidth={1.5}
+                />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <HugeiconsIcon
+                  icon={UserCircleIcon}
+                  className="text-muted-foreground"
+                  strokeWidth={1.5}
+                />
+              </Button>
             </div>
-          </div>
-        </SidebarFooter>
+          </header>
 
-        <SidebarRail />
-      </Sidebar>
-
-      {/* Main area */}
-      <SidebarInset>
-        {/* Navbar */}
-        <header className="flex h-12 shrink-0 items-center justify-between border-b border-border px-4">
-          <SidebarTrigger />
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon">
-              <HugeiconsIcon
-                icon={Logout01Icon}
-                className="text-muted-foreground"
-                strokeWidth={1.5}
-              />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <HugeiconsIcon
-                icon={UserCircleIcon}
-                className="text-muted-foreground"
-                strokeWidth={1.5}
-              />
-            </Button>
-          </div>
-        </header>
-
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </SidebarInset>
-    </SidebarProvider>
+          <main className="flex-1 overflow-y-auto">{children}</main>
+        </SidebarInset>
+      </SidebarProvider>
     </TooltipProvider>
   )
 }

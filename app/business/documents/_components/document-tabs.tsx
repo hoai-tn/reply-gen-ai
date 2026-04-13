@@ -36,7 +36,7 @@ export function DocumentTabs({
           <TabsTrigger key={t.value} value={t.value}>
             {t.label}
             {counts[t.value] > 0 && (
-              <span className="ml-1 text-[10px] tabular-nums text-muted-foreground">
+              <span className="ml-1 text-[10px] text-muted-foreground tabular-nums">
                 {counts[t.value]}
               </span>
             )}

@@ -62,7 +62,7 @@ export function DocumentRow({
         </span>
         <button
           onClick={() => onDelete(doc)}
-          className="rounded p-1 text-muted-foreground opacity-0 transition-all hover:text-destructive group-hover/row:opacity-100"
+          className="rounded p-1 text-muted-foreground opacity-0 transition-all group-hover/row:opacity-100 hover:text-destructive"
           title="Delete"
         >
           <HugeiconsIcon icon={Delete02Icon} size={13} strokeWidth={1.5} />

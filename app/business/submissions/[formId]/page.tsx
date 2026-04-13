@@ -45,7 +45,10 @@ function formatRelative(iso: string) {
   if (diffH < 1) return "Just now"
   if (diffH < 24) return `${Math.floor(diffH)}h ago`
   if (diffH < 168) return `${Math.floor(diffH / 24)}d ago`
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  })
 }
 
 function formatFull(iso: string) {
@@ -97,10 +100,14 @@ export default function FormSubmissionsPage() {
 
   return (
     <div className="flex h-full flex-col overflow-auto">
-
       {/* ── Header ── */}
       <div className="shrink-0 border-b border-border px-6 py-4">
-        <Button variant="ghost" size="sm" asChild className="-ml-2 mb-3 text-muted-foreground">
+        <Button
+          variant="ghost"
+          size="sm"
+          asChild
+          className="mb-3 -ml-2 text-muted-foreground"
+        >
           <Link href="/business/submissions">
             <HugeiconsIcon icon={ArrowLeft01Icon} size={13} strokeWidth={2} />
             Submissions
@@ -116,7 +123,9 @@ export default function FormSubmissionsPage() {
               </>
             ) : (
               <>
-                <h1 className="text-sm font-semibold text-foreground">{form?.name ?? "Form"}</h1>
+                <h1 className="text-sm font-semibold text-foreground">
+                  {form?.name ?? "Form"}
+                </h1>
                 <p className="text-[11px] text-muted-foreground">
                   {form?.schema?.length ?? 0} fields
                   {form && ` · Created ${formatFull(form.created_at)}`}
@@ -127,11 +136,21 @@ export default function FormSubmissionsPage() {
 
           <div className="flex items-center gap-1.5">
             <Badge variant="outline">{loading ? "—" : total} Total</Badge>
-            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
-              <HugeiconsIcon icon={CheckmarkBadge01Icon} size={10} strokeWidth={2} />
+            <Badge
+              variant="outline"
+              className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400"
+            >
+              <HugeiconsIcon
+                icon={CheckmarkBadge01Icon}
+                size={10}
+                strokeWidth={2}
+              />
               {loading ? "—" : replied} Replied
             </Badge>
-            <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
+            <Badge
+              variant="outline"
+              className="border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400"
+            >
               <HugeiconsIcon icon={Clock01Icon} size={10} strokeWidth={2} />
               {loading ? "—" : pending} Pending
             </Badge>
@@ -168,7 +187,9 @@ export default function FormSubmissionsPage() {
                 value={pending}
                 iconClass="text-amber-500"
                 iconBg="bg-amber-50 dark:bg-amber-950/40"
-                valueClass={pending > 0 ? "text-amber-600 dark:text-amber-400" : undefined}
+                valueClass={
+                  pending > 0 ? "text-amber-600 dark:text-amber-400" : undefined
+                }
               />
               <StatCard
                 icon={UserCircleIcon}
@@ -186,11 +207,16 @@ export default function FormSubmissionsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="flex size-7 items-center justify-center rounded-md bg-muted">
-                        <HugeiconsIcon icon={Analytics02Icon} size={14} strokeWidth={1.5} className="text-muted-foreground" />
+                        <HugeiconsIcon
+                          icon={Analytics02Icon}
+                          size={14}
+                          strokeWidth={1.5}
+                          className="text-muted-foreground"
+                        />
                       </div>
                       <CardTitle>Reply rate</CardTitle>
                     </div>
-                    <span className="text-lg font-bold tabular-nums text-foreground">
+                    <span className="text-lg font-bold text-foreground tabular-nums">
                       {replyRate}%
                     </span>
                   </div>
@@ -215,7 +241,7 @@ export default function FormSubmissionsPage() {
             {/* ── Messages ── */}
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <p className="text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
                   Messages{total > 0 && ` · ${total}`}
                 </p>
               </div>
@@ -257,10 +283,19 @@ function StatCard({
   return (
     <Card>
       <CardHeader>
-        <div className={`mb-1 flex size-8 items-center justify-center rounded-lg ${iconBg}`}>
-          <HugeiconsIcon icon={icon} size={42} strokeWidth={1.5} className={iconClass} />
+        <div
+          className={`mb-1 flex size-8 items-center justify-center rounded-lg ${iconBg}`}
+        >
+          <HugeiconsIcon
+            icon={icon}
+            size={42}
+            strokeWidth={1.5}
+            className={iconClass}
+          />
         </div>
-        <CardTitle className={`text-2xl tabular-nums ${valueClass ?? ""}`}>{value}</CardTitle>
+        <CardTitle className={`text-2xl tabular-nums ${valueClass ?? ""}`}>
+          {value}
+        </CardTitle>
         <CardDescription>{label}</CardDescription>
       </CardHeader>
     </Card>
@@ -269,12 +304,20 @@ function StatCard({
 
 /* ─── Submission card (rich preview) ─── */
 
-function SubmissionCard({ submission, form }: { submission: Submission; form: Form | null }) {
+function SubmissionCard({
+  submission,
+  form,
+}: {
+  submission: Submission
+  form: Form | null
+}) {
   const [expanded, setExpanded] = React.useState(false)
   const answered = !!submission.ai_response
   const entries = Object.entries(submission.answers)
   const email = submission.email ?? "Anonymous"
-  const colorClass = submission.email ? avatarColor(submission.email) : "bg-muted text-muted-foreground"
+  const colorClass = submission.email
+    ? avatarColor(submission.email)
+    : "bg-muted text-muted-foreground"
 
   return (
     <Card className="overflow-hidden transition-all">
@@ -284,7 +327,9 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
         className="flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors hover:bg-muted/30"
       >
         {/* Avatar */}
-        <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${colorClass}`}>
+        <div
+          className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${colorClass}`}
+        >
           {email[0].toUpperCase()}
         </div>
 
@@ -292,15 +337,27 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
         <div className="min-w-0 flex-1 space-y-1.5">
           {/* Top line */}
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-foreground">{email}</span>
+            <span className="text-xs font-semibold text-foreground">
+              {email}
+            </span>
             <div className="flex shrink-0 items-center gap-2">
               {answered ? (
-                <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
-                  <HugeiconsIcon icon={CheckmarkBadge01Icon} size={10} strokeWidth={2} />
+                <Badge
+                  variant="outline"
+                  className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400"
+                >
+                  <HugeiconsIcon
+                    icon={CheckmarkBadge01Icon}
+                    size={10}
+                    strokeWidth={2}
+                  />
                   Replied
                 </Badge>
               ) : (
-                <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400">
+                <Badge
+                  variant="outline"
+                  className="border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400"
+                >
                   <HugeiconsIcon icon={Clock01Icon} size={10} strokeWidth={2} />
                   Pending
                 </Badge>
@@ -319,11 +376,16 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
 
           {/* Answer previews */}
           {entries.map(([key, val]) => {
-            const label = form?.schema?.find((f) => f.name === key)?.label ?? key
+            const label =
+              form?.schema?.find((f) => f.name === key)?.label ?? key
             return (
               <div key={key} className="flex items-baseline gap-1.5">
-                <span className="shrink-0 text-[11px] text-muted-foreground">{label}:</span>
-                <span className="truncate text-[11px] text-foreground">{String(val)}</span>
+                <span className="shrink-0 text-[11px] text-muted-foreground">
+                  {label}:
+                </span>
+                <span className="truncate text-[11px] text-foreground">
+                  {String(val)}
+                </span>
               </div>
             )
           })}
@@ -331,7 +393,12 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
           {/* AI response preview */}
           {submission.ai_response && (
             <div className="flex items-baseline gap-1.5">
-              <HugeiconsIcon icon={SparklesIcon} size={11} strokeWidth={1.5} className="mt-px shrink-0 text-emerald-500" />
+              <HugeiconsIcon
+                icon={SparklesIcon}
+                size={11}
+                strokeWidth={1.5}
+                className="mt-px shrink-0 text-emerald-500"
+              />
               <span className="truncate text-[11px] text-emerald-600 dark:text-emerald-400">
                 {submission.ai_response}
               </span>
@@ -347,11 +414,12 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
           <div className="space-y-4 bg-muted/20 px-4 py-4">
             {/* Full answers */}
             <div className="space-y-2">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              <p className="text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
                 Answers
               </p>
               {entries.map(([key, val]) => {
-                const label = form?.schema?.find((f) => f.name === key)?.label ?? key
+                const label =
+                  form?.schema?.find((f) => f.name === key)?.label ?? key
                 return (
                   <Card key={key} size="sm">
                     <CardHeader>
@@ -365,20 +433,31 @@ function SubmissionCard({ submission, form }: { submission: Submission; form: Fo
 
             {/* AI response */}
             <div className="space-y-2">
-              <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                <HugeiconsIcon icon={SparklesIcon} size={11} strokeWidth={1.5} />
+              <p className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
+                <HugeiconsIcon
+                  icon={SparklesIcon}
+                  size={11}
+                  strokeWidth={1.5}
+                />
                 AI Response
               </p>
               {submission.ai_response ? (
-                <Card size="sm" className="border-emerald-200 bg-emerald-50/50 dark:border-emerald-900 dark:bg-emerald-950/20">
+                <Card
+                  size="sm"
+                  className="border-emerald-200 bg-emerald-50/50 dark:border-emerald-900 dark:bg-emerald-950/20"
+                >
                   <CardContent className="pt-3">
-                    <p className="text-xs leading-relaxed text-foreground">{submission.ai_response}</p>
+                    <p className="text-xs leading-relaxed text-foreground">
+                      {submission.ai_response}
+                    </p>
                   </CardContent>
                 </Card>
               ) : (
                 <Card size="sm">
                   <CardContent className="pt-3">
-                    <p className="text-[11px] text-muted-foreground">No AI response generated yet.</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      No AI response generated yet.
+                    </p>
                   </CardContent>
                 </Card>
               )}

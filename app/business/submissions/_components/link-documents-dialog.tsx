@@ -59,7 +59,7 @@ export function LinkDocumentsDialog({
 
   function toggle(id: string) {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     )
   }
 
@@ -78,7 +78,7 @@ export function LinkDocumentsDialog({
   }
 
   const filtered = documents.filter((d) =>
-    d.name.toLowerCase().includes(search.toLowerCase()),
+    d.name.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
@@ -93,7 +93,7 @@ export function LinkDocumentsDialog({
             icon={Search01Icon}
             size={13}
             strokeWidth={1.5}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+            className="absolute top-1/2 left-2.5 -translate-y-1/2 text-muted-foreground"
           />
           <Input
             placeholder="Search documents…"
@@ -118,7 +118,9 @@ export function LinkDocumentsDialog({
             </div>
           ) : filtered.length === 0 ? (
             <p className="py-8 text-center text-xs text-muted-foreground">
-              {documents.length === 0 ? "No documents uploaded yet." : "No matches."}
+              {documents.length === 0
+                ? "No documents uploaded yet."
+                : "No matches."}
             </p>
           ) : (
             <div className="divide-y divide-border">
@@ -152,7 +154,8 @@ export function LinkDocumentsDialog({
 
         {selectedIds.length > 0 && (
           <p className="text-[11px] text-muted-foreground">
-            {selectedIds.length} document{selectedIds.length !== 1 ? "s" : ""} selected
+            {selectedIds.length} document{selectedIds.length !== 1 ? "s" : ""}{" "}
+            selected
           </p>
         )}
 

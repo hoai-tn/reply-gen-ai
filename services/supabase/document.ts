@@ -97,7 +97,7 @@ export async function getLinkedDocumentIds(formId: string): Promise<string[]> {
 export async function syncFormDocuments(
   formId: string,
   nextIds: string[],
-  prevIds: string[],
+  prevIds: string[]
 ) {
   const toAdd = nextIds.filter((id) => !prevIds.includes(id))
   const toRemove = prevIds.filter((id) => !nextIds.includes(id))
@@ -126,7 +126,10 @@ export async function linkDocumentToForm(documentId: string, formId: string) {
   if (error) throw error
 }
 
-export async function unlinkDocumentFromForm(documentId: string, formId: string) {
+export async function unlinkDocumentFromForm(
+  documentId: string,
+  formId: string
+) {
   const { error } = await supabase
     .from("form_documents")
     .delete()
@@ -136,6 +139,9 @@ export async function unlinkDocumentFromForm(documentId: string, formId: string)
 }
 
 export async function deleteDocument(id: string, storagePath: string) {
-  await supabase.from("documents").update({ deleted_at: new Date().toISOString() }).eq("id", id)
+  await supabase
+    .from("documents")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
   await deleteFile(storagePath).catch(() => null)
 }

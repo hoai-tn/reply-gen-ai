@@ -4,7 +4,12 @@ export interface Form {
   id: string
   business_id: string
   name: string
-  schema: Array<{ name: string; label: string; type: string; required?: boolean }>
+  schema: Array<{
+    name: string
+    label: string
+    type: string
+    required?: boolean
+  }>
   created_at: string
   submissions?: [{ count: number }]
   form_documents?: [{ count: number }]
@@ -33,7 +38,7 @@ export async function getForm(id: string) {
 export async function createForm(
   businessId: string,
   name: string,
-  schema: Form["schema"],
+  schema: Form["schema"]
 ) {
   const { data, error } = await supabase
     .from("forms")

@@ -1,16 +1,12 @@
-import pdfParse from "pdf-parse"
+import { PDFParse } from "pdf-parse"
 import mammoth from "mammoth"
 import * as XLSX from "xlsx"
-import { supabaseServer } from "@/lib/supabase-server"
 import { chunkText } from "./chunker"
 import { embedDocuments } from "./embedder"
 
-const CHUNK_BATCH_SIZE = 100
+const CHUNK_BATCH_SIZE = 100 // Adjust based on memory limits and embedding API constraints
 
 export type PipelineInput = {
-  documentId: string
-  businessId: string
-  formId: string
   file: File
 }
 
@@ -25,8 +21,9 @@ async function extractText(file: File): Promise<string> {
   }
 
   if (name.endsWith(".pdf")) {
-    const data = await pdfParse(buffer)
-    return data.text
+    const parser = new PDFParse({ data: buffer })
+    const result = await parser.getText()
+    return result.text
   }
 
   if (name.endsWith(".doc") || name.endsWith(".docx")) {
@@ -47,12 +44,7 @@ async function extractText(file: File): Promise<string> {
 
 // ─── Pipeline ───────────────────────────────────────────────────────────────
 
-export async function runDocumentPipeline({
-  documentId,
-  businessId,
-  formId,
-  file,
-}: PipelineInput): Promise<{ chunks: number }> {
+export async function runDocumentPipeline({ file }: PipelineInput) {
   // 1. Extract
   const text = await extractText(file)
   if (!text.trim()) throw new Error("No text content found in document")
@@ -62,23 +54,17 @@ export async function runDocumentPipeline({
   if (chunks.length === 0) throw new Error("Failed to produce chunks")
 
   // 3. Embed + store in batches to avoid memory/API limits
-  const client = supabaseServer()
-
+  const results = []
   for (let i = 0; i < chunks.length; i += CHUNK_BATCH_SIZE) {
     const batchChunks = chunks.slice(i, i + CHUNK_BATCH_SIZE)
     const batchEmbeddings = await embedDocuments(batchChunks)
 
     const rows = batchChunks.map((content, j) => ({
-      document_id: documentId,
-      business_id: businessId,
-      form_id: formId,
       content,
-      embedding: JSON.stringify(batchEmbeddings[j]),
+      embedding: batchEmbeddings[j],
     }))
-
-    const { error } = await client.from("document_chunks").insert(rows)
-    if (error) throw error
+    results.push(...rows)
   }
 
-  return { chunks: chunks.length }
+  return { results }
 }
