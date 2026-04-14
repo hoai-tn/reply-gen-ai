@@ -48,10 +48,10 @@ Auth logic lives in `services/supabase/auth.ts`. Import through `services/supaba
 | `businesses` | `id`, `owner_id`, `name`, `slug`, `status`,  |
 | `forms` | `id`, `business_id`, `name`, `schema` (JSON field config) |
 | `documents` | `id`, `business_id`, `form_id`, `name` |
-| `document_chunks` | `content`, `embedding`, `business_id`, `form_id` |
+| `document_chunks` | `content`, `embedding`, `business_id`, `document_id` |
 | `submissions` | `id`, `form_id`, `answers` (JSON), `ai_response`, `email` |
 
-`form_id` on `document_chunks` is critical — retrieval must be scoped by both `business_id` and `form_id`.
+Retrieval is scoped by `business_id` (and optionally filtered by `document_id`).
 
 ## Code Style
 

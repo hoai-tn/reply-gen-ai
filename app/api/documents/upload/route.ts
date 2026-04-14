@@ -67,7 +67,6 @@ export async function POST(request: NextRequest) {
       const rows = results.map(({ content, embedding }) => ({
         document_id: doc.id,
         business_id: businessId,
-        form_id: formId,
         content,
         embedding,
       }))

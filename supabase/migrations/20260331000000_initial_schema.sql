@@ -80,7 +80,6 @@ create table if not exists document_chunks (
   id           uuid primary key default gen_random_uuid(),
   document_id  uuid not null references documents(id) on delete cascade,
   business_id  uuid not null references businesses(id) on delete cascade,
-  form_id      uuid not null references forms(id) on delete cascade,
   content      text not null,
   embedding    extensions.halfvec(1536),
   created_at   timestamptz not null default now()

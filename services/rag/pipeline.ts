@@ -1,4 +1,3 @@
-import { PDFParse } from "pdf-parse"
 import mammoth from "mammoth"
 import * as XLSX from "xlsx"
 import { chunkText } from "./chunker"
@@ -21,9 +20,12 @@ async function extractText(file: File): Promise<string> {
   }
 
   if (name.endsWith(".pdf")) {
-    const parser = new PDFParse({ data: buffer })
-    const result = await parser.getText()
-    return result.text
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pdfParse = require("pdf-parse") as (
+      buffer: Buffer
+    ) => Promise<{ text: string }>
+    const data = await pdfParse(buffer)
+    return data.text
   }
 
   if (name.endsWith(".doc") || name.endsWith(".docx")) {
